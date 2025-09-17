@@ -1,25 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Hello Page</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Background JPG with Google Drive Links</title>
+  <meta name="description" content="Access important files from Google Drive. Fast and secure links with beautiful background.">
+
+  <!-- Preload background for faster display -->
+  <link rel="preload" as="image" href="成功新村1965.jpg">
+
   <style>
-    body {
-      background-color: #f0f8ff; /* light blue */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+    /* Full-page background */
+    html, body {
+      height: 100%;
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background: #111;
+      overflow: hidden;
     }
+
+    body {
+      background-image: url('成功新村1965.jpg');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    body.bg-loaded {
+      opacity: 1;
+      animation: backgroundZoom 30s linear infinite;
+    }
+
+    @keyframes backgroundZoom {
+      0% { background-size: 100% 100%; }
+      50% { background-size: 105% 105%; }
+      100% { background-size: 100% 100%; }
+    }
+
+    /* translucent content box */
+    .card {
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-radius: 12px;
+      padding: 28px 36px;
+      max-width: 720px;
+      width: 100%;
+      box-shadow: 0 6px 30px rgba(0,0,0,0.5);
+      z-index: 1;
+      position: relative;
+    }
+
+    h1, p, a.button {
+      text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+    }
+
     h1 {
-      font-size: 3rem;
-      color: #333;
+      margin: 0 0 12px 0;
+      font-size: 1.6rem;
+      letter-spacing: 0.3px;
+    }
+
+    p.lead {
+      margin: 0 0 18px 0;
+      opacity: 0.9;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px; /* space between rows */
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    a.button {
+      display: inline-block;
+      text-decoration: none;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      min-width: 140px;
+      text-align: center;
+      transition: transform 150ms ease, box-shadow 150ms ease;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      line-height: 1.3;
+    }
+
+    a.button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+    }
+
+    a.button:active { transform: translateY(1px); }
+    a.button:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 2px;
+    }
+
+    /* Secondary variant */
+    a.button.secondary {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.08);
+      opacity: 0.98;
+    }
+
+    a.button.secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    }
+
+    /* Faded “future” buttons */
+    a.button.future {
+      opacity: 0.4;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    a.button.future:hover {
+      transform: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 420px) {
+      .card { padding: 18px; }
+      a.button { min-width: 120px; padding: 10px 14px; }
+    }
+    @media (max-width: 360px) {
+      .btn-group { flex-direction: column; gap: 8px; }
+      a.button { min-width: auto; width: 100%; }
+    }
+
+    /* Loading overlay with spinner */
+    #loading-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.2rem;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    #loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #loading-overlay::after {
+      content: "";
+      width: 40px; height: 40px;
+      border: 4px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
-  <h1>Hello</h1>
+  <!-- Loading overlay -->
+  <div id="loading-overlay">Loading</div>
+
+  <div class="card" role="main">
+    <h1>Files on Google Drive</h1>
+    <p class="lead">Click a button below to browse. They will open in a new tab.</p>
+
+    <div class="btn-row">
+      <!-- Row 1: real buttons -->
+      <div class="btn-group">
+        <a class="button" 
+           href="https://drive.google.com/drive/folders/1Mi_uvnLqEscIumh_0e_1WArN3MVfzYg8?usp=sharing"
+           target="_blank" rel="noopener noreferrer">Part 1</a>
+
+        <a class="button secondary"
+           href="https://drive.google.com/drive/folders/1KnOC7CcNP-AgSAAvRQGnzLnHifsTOCot?usp=drive_link"
+           target="_blank" rel="noopener noreferrer">Part 2</a>
+      </div>
+
+      <!-- Row 2: future buttons -->
+      <div class="btn-group">
+        <a class="button secondary future">Coming Soon Part 3</a>
+        <a class="button secondary future">Coming Soon Part 4</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const overlay = document.getElementById('loading-overlay');
+      const img = new Image();
+      const bg = getComputedStyle(document.body).backgroundImage;
+      const m = bg.match(/url\(["']?(.+?)["']?\)/);
+
+      if (m && m[1]) {
+        img.src = m[1];
+        img.onload = function(){
+          document.body.classList.add('bg-loaded');
+          overlay.classList.add('hidden');
+        }
+        img.onerror = function(){
+          document.body.style.backgroundImage = 'linear-gradient(135deg, #2b2b2b, #1a1a1a)';
+          document.body.classList.add('bg-loaded');
+          overlay.classList.add('hidden');
+        }
+      } else {
+        document.body.classList.add('bg-loaded');
+        overlay.classList.add('hidden');
+      }
+    })();
+  </script>
 </body>
 </html>
