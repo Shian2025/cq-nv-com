@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>管理員頁面</title>
+  <style>
+    body { background:#fff; color:#000; font-family:system-ui; display:flex; justify-content:center; align-items:center; height:100vh; text-align:center; margin:0; }
+    .content { background:#f0f0f0; padding:40px 50px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.3); }
+    h1 { margin-bottom:20px; }
+    .click-box {
+      display:inline-block;
+      padding:20px 30px;
+      border-radius:12px;
+      background: linear-gradient(180deg, #8B4513, #5C3317);
+      color:#fff;
+      font-weight:bold;
+      cursor:pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      user-select:none;
+    }
+    .click-box:hover { transform: scale(1.05); box-shadow:0 6px 16px rgba(0,0,0,0.4); }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <h1>歡迎進入管理頁面</h1>
+    <p>請點擊下面按鈕打開管理資料夾</p>
+    <div class="click-box" onclick="window.open('https://drive.google.com/drive/folders/1Fgs92DsaINKq0gmw2xMIIV6UAWSwRpvo?usp=sharing','_blank')">
+      Click to OPEN 管理資料夾
+    </div>
+  </div>
+</body>
+</html>

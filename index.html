@@ -1,36 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Background JPG with Google Drive Links</title>
-  <meta name="description" content="Access important files from Google Drive. Fast and secure links with beautiful background.">
+  <title>台北 成功新村 - Google Drive Links</title>
+  <meta name="description" content="Browse historical photos and documents of 成功新村. Fast and secure Google Drive links with beautiful background.">
 
-  <!-- Preload background for faster display -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="preload" as="image" href="成功新村1965.jpg">
 
   <style>
-    /* Full-page background */
+    :root {
+      --btn-future-bg: rgba(255, 255, 255, 0.05);
+      --btn-future-color: rgba(255, 255, 255, 0.25);
+      --btn-admin-start: #8B4513;
+      --btn-admin-end: #5C3317;
+    }
+
     html, body {
       height: 100%;
       margin: 0;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
       background: #111;
-      overflow: hidden;
+      overflow-x: hidden;
+      text-align: center;
+      color: white;
+      transition: background 0.5s ease;
     }
 
     body {
-      background-image: url('成功新村1965.jpg');
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      text-align: center;
       padding: 2rem;
       opacity: 0;
       transition: opacity 0.6s ease;
@@ -38,7 +39,11 @@
 
     body.bg-loaded {
       opacity: 1;
-      animation: backgroundZoom 30s linear infinite;
+      animation: backgroundZoom 30s ease-in-out infinite alternate;
+      background-image: url('成功新村1965.jpg');
+      background-size: 100% 100%;
+      background-position: center center;
+      background-repeat: no-repeat;
     }
 
     @keyframes backgroundZoom {
@@ -47,49 +52,24 @@
       100% { background-size: 100% 100%; }
     }
 
-    /* translucent content box */
     .card {
-      background: rgba(0, 0, 0, 0.45);
+      background: rgba(0,0,0,0.45);
       backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
       border-radius: 12px;
       padding: 28px 36px;
       max-width: 720px;
       width: 100%;
       box-shadow: 0 6px 30px rgba(0,0,0,0.5);
-      z-index: 1;
-      position: relative;
+      opacity: 0;
+      transition: opacity 0.6s ease 0.3s;
     }
+    body.bg-loaded .card { opacity: 1; }
 
-    h1, p, a.button {
-      text-shadow: 0 2px 6px rgba(0,0,0,0.7);
-    }
+    h1 { margin: 0 0 12px; font-size: 1.6rem; text-shadow: 0 2px 6px rgba(0,0,0,0.85); }
+    p { text-shadow: 0 2px 6px rgba(0,0,0,0.85); }
 
-    h1 {
-      margin: 0 0 12px 0;
-      font-size: 1.6rem;
-      letter-spacing: 0.3px;
-    }
-
-    p.lead {
-      margin: 0 0 18px 0;
-      opacity: 0.9;
-    }
-
-    .btn-row {
-      display: flex;
-      flex-direction: column;
-      gap: 12px; /* space between rows */
-      align-items: center;
-      margin-top: 12px;
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+    .btn-row { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-top: 12px; }
+    .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
     a.button {
       display: inline-block;
@@ -100,59 +80,67 @@
       min-width: 140px;
       text-align: center;
       transition: transform 150ms ease, box-shadow 150ms ease;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      color: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      line-height: 1.3;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: linear-gradient(180deg, rgba(50,50,50,0.9), rgba(30,30,30,0.9));
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     }
+    a.button:hover { transform: translateY(-2px); }
 
-    a.button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
-    }
-
-    a.button:active { transform: translateY(1px); }
-    a.button:focus-visible {
-      outline: 3px solid #fff;
-      outline-offset: 2px;
-    }
-
-    /* Secondary variant */
-    a.button.secondary {
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border: 1px solid rgba(255,255,255,0.08);
-      opacity: 0.98;
-    }
-
-    a.button.secondary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-    }
-
-    /* Faded “future” buttons */
     a.button.future {
-      opacity: 0.4;
+      background: var(--btn-future-bg);
+      color: var(--btn-future-color);
+      border: 1px dashed rgba(255,255,255,0.2);
       pointer-events: none;
       cursor: default;
+      box-shadow: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-style: italic;
     }
 
-    a.button.future:hover {
-      transform: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    /* Admin 按鈕 pulse + shine + hover 閃光 */
+    a.button.admin-button {
+      background: linear-gradient(180deg, var(--btn-admin-start), var(--btn-admin-end));
+      border: 1px solid rgba(255,220,180,0.8);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      animation: pulse 3s ease-in-out infinite;
+      will-change: transform;
+    }
+    a.button.admin-button:hover { transform: scale(1.05); }
+
+    /* 原本 shine 條 */
+    a.button.admin-button::after {
+      content: "";
+      position: absolute;
+      top: 0; left: -75%;
+      width: 50%; height: 100%;
+      background: rgba(255,255,255,0.25);
+      transform: skewX(-25deg);
+      animation: shine 2.5s ease-in-out infinite;
     }
 
-    /* Responsive tweaks */
-    @media (max-width: 420px) {
-      .card { padding: 18px; }
-      a.button { min-width: 120px; padding: 10px 14px; }
+    /* hover 額外閃光 */
+    a.button.admin-button::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(120deg, rgba(255,255,255,0.4), rgba(255,255,255,0) 70%);
+      transform: skewX(-25deg);
+      transition: left 0.6s ease;
+      pointer-events: none;
     }
-    @media (max-width: 360px) {
-      .btn-group { flex-direction: column; gap: 8px; }
-      a.button { min-width: auto; width: 100%; }
-    }
+    a.button.admin-button:hover::before { left: 100%; }
 
-    /* Loading overlay with spinner */
+    @keyframes shine { 0% { left: -75%; } 50% { left: 125%; } 100% { left: 125%; } }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+
     #loading-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -166,77 +154,55 @@
       z-index: 9999;
       transition: opacity 0.5s ease;
     }
-    #loading-overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
+    #loading-overlay.hidden { opacity: 0; pointer-events: none; }
+
     #loading-overlay::after {
       content: "";
       width: 40px; height: 40px;
-      border: 4px solid rgba(255,255,255,0.3);
-      border-top-color: white;
+      border: 4px solid #555;
+      border-top-color: #fff;
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin-left: 10px;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-  <!-- Loading overlay -->
   <div id="loading-overlay">Loading</div>
 
-  <div class="card" role="main">
+  <div class="card">
     <h1>台北 成功新村</h1>
-    <p class="lead">Click a button below to browse. They will open in a new tab.<br>
-                    use 成功新村.com if your browse support it, else use cq-nv.com</p>
+    <p>請點擊下方按鈕瀏覽資料</p>
 
     <div class="btn-row">
-      <!-- Row 1: real buttons -->
       <div class="btn-group">
-        <a class="button" 
-           href="https://drive.google.com/drive/folders/1Mi_uvnLqEscIumh_0e_1WArN3MVfzYg8?usp=sharing"
-           target="_blank" rel="noopener noreferrer">Part 1</a>
-
-        <a class="button secondary"
-           href="https://drive.google.com/drive/folders/1e3M87gxh1wvRuafTkjj42nM-3D-8wni2?usp=sharing"
-           target="_blank" rel="noopener noreferrer">Part 2</a>
+        <a class="button" href="https://drive.google.com/drive/folders/1Mi_uvnLqEscIumh_0e_1WArN3MVfzYg8?usp=sharing" target="_blank" rel="noopener noreferrer" aria-label="Part 1 - Google Drive">Part 1</a>
+        <a class="button" href="https://drive.google.com/drive/folders/1e3M87gxh1wvRuafTkjj42nM-3D-8wni2?usp=sharing" target="_blank" rel="noopener noreferrer" aria-label="Part 2 - Google Drive">Part 2</a>
       </div>
 
-      <!-- Row 2: future buttons -->
       <div class="btn-group">
-        <a class="button secondary future">Coming Soon Part 3</a>
-        <a class="button secondary future">Coming Soon Part 4</a>
+        <a class="button future" title="尚未開放" aria-disabled="true"><span>🔒</span>Part 3</a>
+        <a class="button future" title="尚未開放" aria-disabled="true"><span>🔒</span>Part 4</a>
+      </div>
+
+      <div class="btn-group">
+        <a class="button admin-button" href="pass.html" aria-label="Administration (Private)">
+          Administration (Private)
+        </a>
       </div>
     </div>
   </div>
 
   <script>
-    (function(){
-      const overlay = document.getElementById('loading-overlay');
-      const img = new Image();
-      const bg = getComputedStyle(document.body).backgroundImage;
-      const m = bg.match(/url\(["']?(.+?)["']?\)/);
-
-      if (m && m[1]) {
-        img.src = m[1];
-        img.onload = function(){
-          document.body.classList.add('bg-loaded');
-          overlay.classList.add('hidden');
-        }
-        img.onerror = function(){
-          document.body.style.backgroundImage = 'linear-gradient(135deg, #2b2b2b, #1a1a1a)';
-          document.body.classList.add('bg-loaded');
-          overlay.classList.add('hidden');
-        }
-      } else {
-        document.body.classList.add('bg-loaded');
-        overlay.classList.add('hidden');
-      }
-    })();
+    const overlay = document.getElementById('loading-overlay');
+    const img = new Image();
+    img.src = '成功新村1965.jpg';
+    img.onload = () => {
+      document.body.classList.add('bg-loaded');
+      overlay.classList.add('hidden');
+    };
+    img.onerror = () => overlay.textContent = "圖片載入失敗";
   </script>
 </body>
 </html>
